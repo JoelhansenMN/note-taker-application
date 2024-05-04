@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path')
-const { v4: uuidv4 } = require('uuid');
+const {v4: uuidv4} = require('uuid');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(express.static('public'));
 
 //get route that should read the db.json file and return the notes as JSON
 app.get('/api/notes', (req,res) =>{
-  //res.sendFile(path.join(__dirname, '../db/db.json'))
+  
   let allNotes = fs.readFileSync(path.join(__dirname, './db/db.json'))
   allNotes = JSON.parse(allNotes)
   res.json(allNotes)
@@ -24,10 +24,20 @@ app.get('/api/notes', (req,res) =>{
 app.post('/api/notes', (req,res)=> {
   let allNotes = fs.readFileSync(path.join(__dirname, './db/db.json'))
   allNotes = JSON.parse(allNotes)
-  allNotes.push(req.body)
+  //res.json(allNotes)
+  let newNote = {
+    title: req.body.title,
+    text: req.body.text,
+    id: uuidv4(),
+  };
+
+  allNotes.push(newNote)
   fs.writeFileSync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes))
-  allNotes = JSON.parse(allNotes)
   res.json(allNotes)
+  allNotes = JSON.parse(allNotes)
+  
+  
+  //creating title and body for note 
 });
 
 //get routes for for notes.html file
