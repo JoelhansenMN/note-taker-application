@@ -25,6 +25,7 @@ app.get('/api/notes', (req,res) =>{
 app.post('/api/notes', (req,res)=> {
   let allNotes = fs.readFileSync(path.join(__dirname, './db/db.json'))
   allNotes = JSON.parse(allNotes)
+  
   let newNote = {
     title: req.body.title,
     text: req.body.text,
@@ -36,8 +37,29 @@ app.post('/api/notes', (req,res)=> {
   res.json(allNotes)
   
 });
+// Delete route for notes 
+app.delete('/api/notes/:id', (req, res) => {
+  let allNotes = fs.readFileSync(path.join(__dirname, './db/db.json'));
+  allNotes = JSON.parse(allNotes);
 
-//app.delete('api/notes/:')
+  const noteId = req.params.id;
+
+  // Find the index of the note with the matching id
+  const noteIndex = allNotes.findIndex(note => note.id === noteId);
+
+  if (noteIndex !== -1) {
+    // Remove the note from the array
+    allNotes.splice(noteIndex, 1);
+
+    // Write the updated notes back to the file
+    fs.writeFileSync(path.join(__dirname, "./db/db.json"), JSON.stringify(allNotes));
+
+    res.json(allNotes);
+  } else {
+    res.status(404).json({ message: 'Note not found' });
+  }
+});
+
 
 //get routes for for notes.html file
 app.get('/notes', (req,res) =>{
