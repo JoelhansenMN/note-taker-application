@@ -12,4 +12,4 @@
   ## Links:
   [link to repo](https://github.com/JoelhansenMN/note-taker-application)
 
-  [link to functional deployed applicaiton]()
+  [link to functional deployed applicaiton](https://note-taker-application-19mz.onrender.com/)
